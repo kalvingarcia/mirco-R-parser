@@ -1,0 +1,211 @@
+Script started on 2021-10-10 23:40:23-0500
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ javaexitjavac *.java
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ javac *.java[8Pexitclear[1Pexitjavac *.java[K[K[K[K[K[K[K[K MicroRTree < test1.R
+Source Program
+--------------
+
+# Test1.R
+
+# This program tests basic statements and expressions. 
+
+source ("List.R")
+
+main <- function () {
+  x <- as.integer (readline ());
+  y <- as.integer (readline ());
+  q <- 0;
+  r <- x;
+  while (r >= y) {
+    q <- q + 1;
+    r <- r - y;
+  }
+  print (q);
+  print (r);
+}
+Abstract Syntax Tree for main
+(: (: (: (: (: (: (<- (id x)(readline))(<- (id y)(readline)))(<- (id q)(int 0)))(<- (id r)(id x)))(while (>= (id r)(id y))(: (<- (id q)(+ (id q)(int 1)))(<- (id r)(- (id r)(id y))))))(print (id q)))(print (id r)))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ java MicroRTree < test1.R[C[1P.R2.R
+Source Program
+--------------
+
+# Test2.R
+
+# This program tests list manipulation operators.
+
+source ("List.R")
+
+main <- function () {
+  r <- 2;
+  my_list <- null ();
+  while (r < 5) {
+    my_list <- cons (r, my_list);
+    r <- r + 1;
+  }
+  h <- head (my_list);
+  my_list_tl <- tail (my_list);
+  print (h);
+  print (my_list_tl);
+}
+Abstract Syntax Tree for main
+(: (: (: (: (: (: (<- (id r)(int 2))(<- (id my_list)(null )))(while (< (id r)(int 5))(: (<- (id my_list)(apply cons(id r)(id my_list)))(<- (id r)(+ (id r)(int 1))))))(<- (id h)(apply head(id my_list))))(<- (id my_list_tl)(apply tail(id my_list))))(print (id h)))(print (id my_list_tl)))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ java MicroRTree < test2.R[1P.R3.R
+Source Program
+--------------
+
+# Test3.R
+
+# This program tests non-recursive functions.
+
+source ("List.R")
+
+area <- function (x, y, h) {
+  z <- 2 * (x * y + (x * h) + y * h);
+  return (z);
+}Abstract Syntax Tree forarea
+
+(: (<- (id z)(* (int 2)(+ (+ (* (id x)(id y))(* (id x)(id h)))(* (id y)(id h)))))(return (id z)))
+
+main <- function () {
+  a <- as.integer (readline ());
+  b <- as.integer (readline ());
+  h <- as.integer (readline ());
+  s <- area (a, b, h);
+  print (s);
+}
+Abstract Syntax Tree for main
+(: (: (: (: (<- (id a)(readline))(<- (id b)(readline)))(<- (id h)(readline)))(<- (id s)(apply area(: (: (id a)(id b))(id h)))))(print (id s)))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ java MicroRTree < test3.R[1P.R4.R
+Source Program
+--------------
+
+# Test4.R
+
+# This program tests recursive functions.
+
+source ("List.R")
+
+facto <- function (x) {
+  if (x == 1) {
+    s <- 1;
+  }
+  else {
+    s <- x * facto (x - 1);
+  }
+  return (s);
+}Abstract Syntax Tree forfacto
+
+(: (if (== (id x)(int 1))(<- (id s)(int 1))(<- (id s)(* (id x)(apply facto(- (id x)(int 1))))))(return (id s)))
+
+main <- function () {
+  i <- as.integer (readline ());
+  fac <- facto (i);
+  print (fac);
+}
+Abstract Syntax Tree for main
+(: (: (<- (id i)(readline))(<- (id fac)(apply facto(id i))))(print (id fac)))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ java MicroRTree < test4.R[1P.R5.R
+Source Program
+--------------
+
+# Test5.R
+
+# This program tests recursive functions on lists.
+
+source ("List.R")
+
+cons_my_list <- function (r, my_list) {
+  if (r <= 10) {
+    my_list <- cons (r, my_list);
+    my_list <- cons_my_list (r + 1, my_list);
+  }
+  return (my_list);
+}Abstract Syntax Tree forcons_my_list
+
+(: (if (<= (id r)(int 10))(: (<- (id my_list)(apply cons(id r)(id my_list)))(<- (id my_list)(apply cons_my_list(: (+ (id r)(int 1))(id my_list))))))(return (id my_list)))
+
+main <- function () {
+# r <- as.integer (readline ());
+# my_list <- null ();
+# my_list <- cons_my_list (r, my_list);
+# print (my_list);
+  print (cons_my_list (as.integer (readline ()), null ())); # nested function calls
+}
+Abstract Syntax Tree for main
+(print (apply cons_my_list(: (readline)(null ))))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ java MicroRTree < test5.R[1P.R6.R
+Source Program
+--------------
+
+# Test6.R
+
+# This program tests two recursive functions on lists.
+
+source ("List.R")
+
+cons_a_list <- function (r, list) {
+  my_list <- list;
+  if (r != 0) {
+    my_list <- cons_a_list (r - 1, cons (r, list));
+  }
+  return (my_list);
+}Abstract Syntax Tree forcons_a_list
+
+(: (: (<- (id my_list)(id list))(if (!= (id r)(int 0))(<- (id my_list)(apply cons_a_list(: (- (id r)(int 1))(apply cons(id r)(id list)))))))(return (id my_list)))
+
+equal <- function (list1, list2) {
+  if (length (list1) != length (list2)) {
+    result <- 0;
+  }
+  else {
+    if (length (list1) == 0 && length (list2) == 0) {
+      result <- 1;
+    }
+    else {
+      if (head (list1) != head (list2)) {
+        result <- 0;
+      }
+      else {
+        result <- equal (tail (list1), tail (list2));
+      }
+    }
+  }
+  return (result);
+}Abstract Syntax Tree forequal
+
+(: (if (!= (apply length(id list1))(apply length(id list2)))(<- (id result)(int 0))(if (&& (== (apply length(id list1))(int 0))(== (apply length(id list2))(int 0)))(<- (id result)(int 1))(if (!= (apply head(id list1))(apply head(id list2)))(<- (id result)(int 0))(<- (id result)(apply equal(: (apply tail(id list1))(apply tail(id list2))))))))(return (id result)))
+
+main <- function () {
+  r <- as.integer (readline ());
+  my_list <- null ();
+  l1 <- cons_a_list (r, my_list);
+  l2 <- cons_a_list (r, my_list);  
+  l3 <- cons_a_list (r - 1, my_list);  
+  l1_eq_l2 <- equal (l1, l2);
+  l1_eq_l3 <- equal (l1, l3);
+  print (l1_eq_l2);
+  print (l1_eq_l3);
+}
+Abstract Syntax Tree for main
+(: (: (: (: (: (: (: (: (<- (id r)(readline))(<- (id my_list)(null )))(<- (id l1)(apply cons_a_list(: (id r)(id my_list)))))(<- (id l2)(apply cons_a_list(: (id r)(id my_list)))))(<- (id l3)(apply cons_a_list(: (- (id r)(int 1))(id my_list)))))(<- (id l1_eq_l2)(apply equal(: (id l1)(id l2)))))(<- (id l1_eq_l3)(apply equal(: (id l1)(id l3)))))(print (id l1_eq_l2)))(print (id l1_eq_l3)))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ java MicroRTree < test6.R[1P.R7.R
+Source Program
+--------------
+
+source ("List.R")
+main <- function () {
+	x <- 0;
+	y <- x;
+}
+Abstract Syntax Tree for main
+(: (<- (id x)(int 0))(<- (id y)(id x)))
+Parse Successful!
+]0;kjg0156@cse06: ~/fa21/csce4430/hw3kjg0156@cse06:~/fa21/csce4430/hw3$ exit
+exit
+
+Script done on 2021-10-10 23:41:45-0500
